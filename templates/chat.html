@@ -1,5 +1,22 @@
 {% extends "base.html" %}
 {% block title %}Chat with MediCare{% endblock %}
 {% block content %}
-<p>This is Chat section</p>
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>Chat</h2>
+    </div>
+    <div class="chat-messages">
+        <div class="message bot">
+            <span class="text">Hi! How can I help you today?</span>
+        </div>
+        <div class="message user">
+            
+        </div>
+    </div>
+    <div class="chat-input">
+        <input type="text" placeholder="Type your message..." id="chatInput" />
+        <button id="sendButton">Send</button>
+    </div>
+</div>
+
 {% endblock %}
