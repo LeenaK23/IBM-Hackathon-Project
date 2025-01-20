@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class="welcome">
+    <h1>Welcome to Medicare App!</h1>
+    <p><a href="{{ url_for('login') }}" class="btn">Login</a></p>
+    <p><a href="{{ url_for('signup') }}" class="btn">Signup</a></p>
+</div>
+{% endblock %}

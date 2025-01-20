@@ -84,9 +84,9 @@ def login():
 
 
 # Route for the dashboard or home page after login
-@app.route('/dashboard')
+@app.route('/')
 def dashboard():
-    return "Welcome to your dashboard!"
+    return render_template('welcome.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
