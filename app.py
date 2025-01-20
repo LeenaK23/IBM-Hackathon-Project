@@ -99,6 +99,14 @@ def main():
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')
+
+@app.route('/report')
+def report():
+    return render_template('report.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
