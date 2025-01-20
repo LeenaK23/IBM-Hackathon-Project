@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Main Page{% endblock %}
+
+{% block content %}
+
+ <!-- Navigation Bar -->
+ <nav class="navbar fixed-top bg-body-tertiary">
+    <div class="container-fluid">
+      
+    
+    <h1 class="navbar-brand">MediCare App</h1>
+    <ul class="navbar-links">
+        <li><a href="{{ url_for('main') }}">Home</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="dropdown">
+            <a class="dropdown-btn">Services</a>
+            <ul class="dropdown-menu">
+                <li><a href="#">Chat with Medicare</a></li>
+                <li><a href="#">Report Analysis</a></li>
+                
+            </ul>
+        </li>
+        <li><a href="{{ url_for('login') }}">Logout</a></li>
+    </ul>
+</div>
+</nav>
+
+<div class="main-container">
+    <!-- Greeting Section -->
+    <h1>Welcome, {{ user.username }}!</h1>
+    <p>
+        This is your central hub for managing your activities and exploring the services we offer. 
+        Navigate using the menu above to explore the dashboard, services, or log Lorem ipsum dolor sit amet consectetur adipisicing elit. Error aspernatur officiis quod deleniti debitis quis, vel doloremque similique, consectetur impedit necessitatibus? Odit ipsum consequatur ea dolore necessitatibus nostrum nulla non!
+    </p>
+
+    <!-- About Section -->
+    <div class="about-section">
+        <h2>About Our Website</h2>
+        <p>
+            Our website is designed to assist you in managing tasks efficiently. Whether it's tracking your activities, 
+            exploring new services, or simply staying connected, we have you covered.
+        </p>
+        <p>
+            Use the <strong>Services</strong> dropdown to explore what we offer, or visit your <strong>Dashboard</strong> to check your updates.
+        </p>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2025 Flask App. All rights reserved.</p>
+</footer>
+{% endblock %}

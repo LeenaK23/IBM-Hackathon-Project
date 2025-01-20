@@ -72,7 +72,7 @@ def login():
             
             if result:
                 flash("Login successful!", "success")
-                return redirect(url_for('Landpage'))  # Redirect to a dashboard or home page
+                return redirect(url_for('main'))  # Redirect to a dashboard or home page
             else:
                 flash("Invalid username or password!", "danger")
                 return redirect(url_for('login'))
@@ -85,12 +85,20 @@ def login():
 
 # Route for the dashboard or home page after login
 @app.route('/')
-def dashboard():
+def initial():
     return render_template('welcome.html')
 
-@app.route('/LandPage')
-def Landpage():
-    return "something"
+@app.route('/main')
+def main():
+    user_details = {
+        "username": "JohnDoe"  # Replace with actual session data
+    }
+    return render_template('main.html', user=user_details)
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
