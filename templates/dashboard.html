@@ -1,19 +1,74 @@
 {% extends "base.html" %}
-{% block title %}Dashboard{% endblock %}
 
 {% block content %}
 <div class="dashboard-container">
+    <!-- Header Section -->
+    <section class="header-section">
+        <h1>Welcome, [User's Name]!</h1>
+        <p>Your personalized healthcare dashboard provides an overview of your profile and analytics.</p>
+    </section>
 
-    <!-- Main Content -->
-    <div class="dashboard-main">
-        <h2>Welcome, </h2>
-        <p>Your name </p>
-        <p>Your email </p>
-
-        <div class="dashboard-details">
-            <h3>Your Activities</h3>
-            <p>Details about user activities will go here.</p>
+    <!-- Profile Section -->
+    <section class="profile-section">
+        <h2>Your Profile</h2>
+        <div class="profile-card">
+            <img src="/static/images/user-avatar.png" alt="User Avatar" class="profile-avatar">
+            <div class="profile-details">
+                <h3>John Doe</h3>
+                <p>Email: johndoe@example.com</p>
+                <p>Role: Healthcare Specialist</p>
+                <p>Member Since: January 2023</p>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Stats Cards -->
+    <section class="stats-cards">
+        <div class="card">
+            <h2>Total Patients</h2>
+            <p>450</p>
+        </div>
+        <div class="card">
+            <h2>Reports</h2>
+            <p>15 Pending</p>
+        </div>
+        <div class="card">
+            <h2>Messages</h2>
+            <p>8 Unread</p>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section class="analytics-section">
+        <h2>Health Analytics</h2>
+        <div class="widget chart-widget">
+            <canvas id="analyticsChart"></canvas>
+        </div>
+    </section>
 </div>
+
+<!-- JavaScript for Chart -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById("analyticsChart").getContext("2d");
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: ["January", "February", "March", "April", "May"],
+            datasets: [
+                {
+                    label: "Patients Seen",
+                    data: [50, 75, 60, 90, 100],
+                    borderColor: "#7091E6",
+                    backgroundColor: "rgba(112, 145, 230, 0.3)",
+                    fill: true,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+        },
+    });
+</script>
 {% endblock %}
+
