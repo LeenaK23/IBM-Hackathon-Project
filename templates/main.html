@@ -44,9 +44,83 @@
             Use the <strong>Services</strong> dropdown to explore what we offer, or visit your <strong>Dashboard</strong> to check your updates.
         </p>
     </div>
+
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Welcome to <span class="brand-name">MediCare</span></h1>
+            <p>Your companion for personalized healthcare solutions. Explore tools, consult experts, and stay healthy!</p>
+            <a href="{{ url_for('chat') }}" class="btn btn-primary">Explore Services</a>
+        </div>
+        <div class="hero-animation">
+            <lottie-player
+                src="https://assets3.lottiefiles.com/packages/lf20_gfln1z3j.json"
+                background="transparent"
+                speed="1"
+                style="width: 500px; height: 500px;"
+                loop
+                autoplay
+            ></lottie-player>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <h2>Our Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-stethoscope"></i>
+                <h3>Symptom Checker</h3>
+                <p>Analyze your symptoms and get instant recommendations.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-user-md"></i>
+                <h3>Consult Experts</h3>
+                <p>Connect with top healthcare professionals for advice.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-heartbeat"></i>
+                <h3>Health Insights</h3>
+                <p>Track and manage your health with personalized insights.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-pills"></i>
+                <h3>Medication Info</h3>
+                <p>Get details about your medications and reminders.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <h2>What Our Users Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>"MediCare has revolutionized the way I manage my health. Highly recommended!"</p>
+                <span>- Sarah J.</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"I love the Symptom Checker. It's quick, accurate, and so easy to use."</p>
+                <span>- David K.</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"The virtual assistant helped me connect with a specialist in no time. Amazing!"</p>
+                <span>- Emily W.</span>
+            </div>
+        </div>
+    </section>
+
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest"></script>
+
 
 <footer>
     <p>&copy; 2025 MediCare App. All rights reserved.</p>
 </footer>
 {% endblock %}
+
+
