@@ -2,15 +2,59 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import ibm_db
 import hashlib
 import secrets
+import os
+from ibm_watsonx_ai import Credentials, APIClient
+import PyPDF2
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_chroma import Chroma
+from langchain_ibm import WatsonxEmbeddings
+from langchain.docstore.document import Document
+from langchain.chains import RetrievalQA
+from ibm_watsonx_ai.foundation_models.utils.enums import ModelTypes
+from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
+from ibm_watsonx_ai.foundation_models.utils.enums import DecodingMethods
+from langchain_ibm import WatsonxLLM
+import jsonify
+
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
 
 # IBM Db2 Connection string
 db2_connection_string = "DATABASE=bludb;HOSTNAME=0c77d6f2-5da9-48a9-81f8-86b520b87518.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;PORT=31198;PROTOCOL=TCPIP;UID=qsj67798;PWD=LKc0qT2omrUoA6qm;SECURITY=SSL"
 
+# WatsonX credentials
+credentials = Credentials(
+    url="https://us-south.ml.cloud.ibm.com",
+    api_key="REOuCDyvK-F77HZW6CtChMWDAhSBxqKDTcfvzSmmJkfI",
+)
+project_id = os.getenv("97ea408b-8fee-4927-86e3-13fdc670ee98","a8f0c192-1329-403b-85cf-7d6f8e8c43ed")
+api_client = APIClient(credentials=credentials, project_id=project_id)
 
+# Initialize Watsonx embeddings
+embeddings = WatsonxEmbeddings(
+    model_id="ibm/slate-30m-english-rtrvr",
+    url=credentials.url,
+    apikey=credentials.api_key,
+    project_id=project_id,
+)
 
+# Initialize Granite model
+parameters = {
+    GenParams.DECODING_METHOD: DecodingMethods.GREEDY,
+    GenParams.MIN_NEW_TOKENS: 1,
+    GenParams.MAX_NEW_TOKENS: 100,
+    GenParams.STOP_SEQUENCES: ["<|endoftext|>"]
+}
+model_id = "ibm/granite-3-8b-instruct"
+watsonx_granite = WatsonxLLM(
+    model_id=model_id,
+    url=credentials.url,
+    apikey=credentials.api_key,
+    project_id=project_id,
+    params=parameters
+)
 
+qa = None
 # Route for displaying the signup page
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -41,7 +85,7 @@ def signup():
             ibm_db.bind_param(stmt, 2, hashed_password)
             ibm_db.execute(stmt)
 
-            flash("Signup successful! Please log in.", "success")
+            
             return redirect(url_for('login'))
         else:
             flash("Database connection failed!", "danger")
@@ -106,6 +150,52 @@ def chat():
 @app.route('/report')
 def report():
     return render_template('report.html')
+
+@app.route('/process', methods=['POST'])
+def process_file():
+    """Handle file upload and query."""
+    if 'file' not in request.files:
+        return render_template('result.html', error="No file part in the request")
+
+    file = request.files['file']
+
+    if not file or file.filename == '':
+        return render_template('result.html', error="No file selected")
+
+    if not (file.filename.endswith('.pdf') or file.filename.endswith('.txt')):
+        return render_template('result.html', error="Unsupported file type. Please upload a .pdf or .txt file.")
+
+    # Read file content
+    text = ""
+    if file.filename.endswith('.pdf'):
+        pdf_reader = PyPDF2.PdfReader(file)
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+    elif file.filename.endswith('.txt'):
+        text = file.read().decode('utf-8')
+
+    # Process text into chunks
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=0)
+    texts = text_splitter.split_text(text)
+    documents = [Document(page_content=chunk) for chunk in texts]
+
+    # Create a vector store
+    docsearch = Chroma.from_documents(documents, embeddings)
+
+    # Build RetrievalQA
+    qa = RetrievalQA.from_chain_type(
+        llm=watsonx_granite,
+        chain_type="stuff",
+        retriever=docsearch.as_retriever()
+    )
+
+    # Query from user input
+    query = request.form.get('query', "Default query?")
+    response = qa.invoke(query)
+
+    # Return the response as plain text
+    return render_template('result.html', response=response)
+
 
 
 if __name__ == '__main__':
