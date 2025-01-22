@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+import os
+os.add_dll_directory('D:\\VirtualEnv\\Lib\\site-packages\\clidriver\\bin') 
 import ibm_db
 import hashlib
 import secrets
-import os
 from ibm_watsonx_ai import Credentials, APIClient
 import PyPDF2
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -25,9 +26,9 @@ db2_connection_string = "DATABASE=bludb;HOSTNAME=0c77d6f2-5da9-48a9-81f8-86b520b
 # WatsonX credentials
 credentials = Credentials(
     url="https://us-south.ml.cloud.ibm.com",
-    api_key="REOuCDyvK-F77HZW6CtChMWDAhSBxqKDTcfvzSmmJkfI",
+    api_key="wUumZ-raqvUZ-a5J2rOBTlkWFv7YNpnNFJyanU55e0GB",
 )
-project_id = os.getenv("97ea408b-8fee-4927-86e3-13fdc670ee98","a8f0c192-1329-403b-85cf-7d6f8e8c43ed")
+project_id = os.getenv("97ea408b-8fee-4927-86e3-13fdc670ee98","f18352f9-2746-4cc6-b3c8-8025ac2377bb")
 api_client = APIClient(credentials=credentials, project_id=project_id)
 
 # Initialize Watsonx embeddings
@@ -194,9 +195,11 @@ def process_file():
     query = request.form.get('query', "Default query?")
     response = qa.invoke(query)
 
-    # Return the response as plain text
-    return render_template('result.html', response=response)
+    # Extract only the answer text from the response
+    
 
+    # Return the answer text as plain text
+    return render_template('result.html', response=response)
 
 
 if __name__ == '__main__':
