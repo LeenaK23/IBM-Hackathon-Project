@@ -1,20 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Query Result</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Query Result</h1>
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% else %}
-            <pre>{{ response }}</pre> <!-- Display the response as plain text -->
-        {% endif %}
-        <a href="{{url_for(report)}}">Go Back</a>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Query Result</h1>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% else %}
+        <p>{{ response }}</p>  <!-- Display only the answer text -->
+    {% endif %}
+    <a href="/">Go Back</a>
+
+    {% endblock %}
