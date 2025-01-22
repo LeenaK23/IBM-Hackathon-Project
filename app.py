@@ -86,6 +86,7 @@ def login():
 # Route for the dashboard or home page after login
 @app.route('/')
 def initial():
+    
     return render_template('welcome.html')
 
 @app.route('/main')

@@ -1,10 +1,54 @@
 {% extends "base.html" %}
+
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-<div class="welcome">
-    <h1>Welcome to Medicare App!</h1>
-    <p><a href="{{ url_for('login') }}" class="btn">Login</a></p>
-    <p><a href="{{ url_for('signup') }}" class="btn">Signup</a></p>
+<div class="welcome-container">
+    <div class="content">
+        <h1 id="dynamic-greeting" class="welcome-title"></h1>
+        <p class="welcome-subtitle">
+            <span class="brand-name">MediCare Chat Assistant</span>, your trusted companion for medical insights, report analysis, and healthcare solutions.
+        </p>
+        <div id="date-time" class="date-time"></div>
+        <div class="button-container">
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+            <a href="{{ url_for('signup') }}" class="btn btn-secondary">Sign Up</a>
+        </div>
+    </div>
+    <div class="welcome-image">
+        <img src="{{ url_for('static', filename='images/medical_care.svg') }}" alt="">
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Dynamic Greeting
+    const greetingElement = document.getElementById("dynamic-greeting");
+    const dateTimeElement = document.getElementById("date-time");
+    const hour = new Date().getHours();
+    const userName = "{{ user_name if user_name else '' }}"; // Use user's name if available
+    let greeting;
+
+    if (hour < 12) {
+        greeting = "Good Morning";
+    } else if (hour < 18) {
+        greeting = "Good Afternoon";
+    } else {
+        greeting = "Good Evening";
+    }
+
+    // Display the greeting with user's name if available
+    greetingElement.textContent = `${greeting}${userName ? ', ' + userName : ''}!`;
+
+    // Show current date and time dynamically
+    function updateDateTime() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        dateTimeElement.textContent = now.toLocaleString('en-US', options);
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000); // Update every second
+</script>
 {% endblock %}

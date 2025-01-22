@@ -3,22 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}MediCare App{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    
+    <title>{% block title %}MediCare{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
    
-
-    <!-- Main Content -->
-    <main>
+    <!-- Content Block -->
+    <main class="main-content">
         {% block content %}
-        <!-- Child templates will insert content here -->
         {% endblock %}
     </main>
-
-    
-    <script src="{{url_for('static',filename='script.js')}}"></script>   
 </body>
+
+<script>
+    const chatInput = document.getElementById('chatInput');
+const sendButton = document.getElementById('sendButton');
+const chatMessages = document.querySelector('.chat-messages');
+
+sendButton.addEventListener('click', sendMessage);
+
+function sendMessage() {
+    const messageText = chatInput.value.trim();
+    if (messageText) {
+        // Add user message
+        const userMessage = document.createElement('div');
+        userMessage.classList.add('message', 'user');
+        userMessage.innerHTML = `<span class="text">${messageText}</span>`;
+        chatMessages.appendChild(userMessage);
+
+        // Scroll to the bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Clear input
+        chatInput.value = '';
+
+        // Simulate bot response
+        setTimeout(() => {
+            const botMessage = document.createElement('div');
+            botMessage.classList.add('message', 'bot');
+            botMessage.innerHTML = `<span class="text">Got it! Here's my response to: "${messageText}"</span>`;
+            chatMessages.appendChild(botMessage);
+
+            // Scroll to the bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+    }
+}
+
+</script>
+
+<script>
+    const greetingElement = document.querySelector(".welcome-title");
+    const hour = new Date().getHours();
+    let greeting;
+
+    if (hour < 12) {
+        greeting = "Good Morning";
+    } else if (hour < 18) {
+        greeting = "Good Afternoon";
+    } else {
+        greeting = "Good Evening";
+    }
+
+    greetingElement.innerHTML = `${greeting}, Welcome to <span class="brand-name">MediCare</span>!`;
+</script>
 </html>
 
